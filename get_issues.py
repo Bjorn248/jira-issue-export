@@ -26,6 +26,7 @@ while 1 == 1:
     with open('JIRA_EXPORT_' + `start` + '.xls', "wb") as local_file:
         local_file.write(resp.read())
     statinfo = os.stat('JIRA_EXPORT_' + `start` + '.xls')
+# if the size of the new file is less than 3000 bytes, break the loop, because this likely means that it is an empty table
     if statinfo.st_size < 3000:
         break
     soup = BeautifulSoup(open('JIRA_EXPORT_' + `start` + '.xls'))
