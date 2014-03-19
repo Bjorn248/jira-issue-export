@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import urllib, urllib2, cookielib, os, csv, re, getpass
 from bs4 import BeautifulSoup
 from urllib2 import urlopen
@@ -34,11 +35,23 @@ while 1 == 1:
     headers = [re.sub(' +', ' ', header.text.encode('utf8')).strip() for header in table.find_all('th')]
     rows = []
     for row in table.find_all('tr'):
-        rows.append([re.sub(' +', ' ', val.text.encode('utf8')).strip() for val in row.find_all('td')])
+        vals = ([re.sub(' +', ' ', val.text.encode('utf8')).strip() for val in row.find_all('td')])
+# These comments were just me deleting certain columns entirely from the data set that were not needed, and also demonstrates how it can be done
+    #    if len(vals) != 0:
+    #        del vals[28]
+    #        del vals[45]
+    #        del vals[53]
+        rows.append(vals)
+    # del headers[28]
+    # del headers[45]
+    # del headers[53]
     with open('JIRA_EXPORT_' + `start` + '.csv', 'wb') as f:
-        writer = csv.writer(f, quoting=csv.QUOTE_ALL)
+        writer = csv.writer(f, quoting=csv.QUOTE_MINIMAL)
         if start == 0:
             writer.writerow(headers)
         writer.writerows(row for row in rows if row)
     os.system('cat ' + 'JIRA_EXPORT_' + `start` + '.csv' + ' >> master.csv')
     start += 1000
+# Clean up extra files
+os.system('rm JIRA_EXPORT_*.csv')
+os.system('rm JIRA_EXPORT_*.xls')
