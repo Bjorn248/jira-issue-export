@@ -38,7 +38,7 @@ while 1 == 1:
     table = soup.find('table', attrs={ "id" : "issuetable"})
     headers = [re.sub(' +', ' ', header.text).strip() for header in table.find_all('th')]
     for index, header in enumerate(headers):
-        if header in columns_we_want.keys():
+        if header in columns_we_want:
             header_indices[index] = 1
     headers_we_want = []
     for i in header_indices.keys():
